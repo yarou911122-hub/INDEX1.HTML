@@ -30,12 +30,9 @@ SECRET_KEY = 'django-insecure-7iq@l^w(a#+%w2&c4rk+o)^5o+69zc_8w#h9j0rw$a8sgt01@r
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.getenv(
-        "ALLOWED_HOSTS",
-        "127.0.0.1,localhost"
-    ).split(",")
-    if host.strip()
+    "my-campus-web.onrender.com",
+    "127.0.0.1",
+    "localhost",
 ]
 
 ALLOWED_HOSTS = []
