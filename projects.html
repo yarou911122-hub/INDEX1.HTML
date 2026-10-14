@@ -1,0 +1,133 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>主持計畫</title>
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <!-- 圖表套件 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+    <script src="{% static 'script.js' %}" defer></script>
+</head>
+
+<body>
+    <nav>
+        <a href="{% url 'home' %}">首頁</a>
+        <a href="{% url 'publication_list' %}">學術論著</a>
+        <a href="{% url 'project_list' %}">主持計畫</a>
+    </nav>
+
+    <main>
+        <h1>主持計畫</h1>
+        <p>這裡將展示教授主持的研究計畫。</p>
+
+        <!-- 搜尋與篩選 -->
+        <div class="filters">
+            <input
+                type="text"
+                id="projectSearch"
+                placeholder="搜尋計畫名稱或主持人..."
+            >
+
+            <select id="projectYearFilter">
+                <option value="all">全部開始年份</option>
+                {% for project in projects %}
+                    <option value="{{ project.start_year }}">
+                        {{ project.start_year }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select id="fundingFilter">
+                <option value="all">全部補助單位</option>
+                {% for project in projects %}
+                    {% if project.funding_agency %}
+                        <option value="{{ project.funding_agency }}">
+                            {{ project.funding_agency }}
+                        </option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- 統計卡片 -->
+        <section class="publication-dashboard">
+            <div class="stat-card">
+                <h3>符合條件的主持計畫</h3>
+                <p id="projectCount">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>涵蓋開始年份</h3>
+                <p id="projectYearCount">0</p>
+            </div>
+        </section>
+
+        <!-- 互動圖表 -->
+        <section class="chart-section">
+            <div class="chart-heading">
+                <h2>各年度主持計畫統計</h2>
+
+                <select id="projectChartType">
+                    <option value="bar">長條圖</option>
+                    <option value="line">折線圖</option>
+                </select>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="projectChart"></canvas>
+            </div>
+        </section>
+
+        <!-- 原本的研究計畫列表 -->
+        <h2>研究計畫列表</h2>
+
+        <div id="projectList">
+            {% for project in projects %}
+                <article
+                    class="publication project"
+                    data-year="{{ project.start_year }}"
+                    data-funding="{{ project.funding_agency }}"
+                >
+                    <h3>{{ project.title }}</h3>
+
+                    <p>
+                        <strong>計畫主持人：</strong>
+                        {{ project.principal_investigator }}
+                    </p>
+
+                    <p>
+                        <strong>執行期間：</strong>
+                        {{ project.start_year }} ～ {{ project.end_year }}
+                    </p>
+
+                    {% if project.funding_agency %}
+                        <p>
+                            <strong>補助單位：</strong>
+                            {{ project.funding_agency }}
+                        </p>
+                    {% endif %}
+
+                    {% if project.description %}
+                        <p>
+                            <strong>計畫說明：</strong>
+                            {{ project.description }}
+                        </p>
+                    {% endif %}
+                </article>
+            {% empty %}
+                <p>目前尚無主持計畫資料。</p>
+            {% endfor %}
+        </div>
+
+        <p id="projectNoResults" hidden>
+            找不到符合條件的主持計畫。
+        </p>
+    </main>
+</body>
+</html>

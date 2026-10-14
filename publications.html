@@ -1,0 +1,123 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學術論著</title>
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <!-- Chart.js 圖表套件 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+    <script src="{% static 'script.js' %}" defer></script>
+</head>
+<body>
+    <nav>
+        <a href="{% url 'home' %}">首頁</a>
+        <a href="{% url 'publication_list' %}">學術論著</a>
+        <a href="{% url 'project_list' %}">主持計畫</a>
+    </nav>
+
+    <main>
+        <h1>學術論著</h1>
+        <p>瀏覽期刊論文與研討會論文。</p>
+
+        <!-- 搜尋與篩選 -->
+        <div class="filters">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="搜尋論文標題或作者..."
+            >
+
+            <select id="yearFilter">
+                <option value="all">全部年份</option>
+                {% for publication in publications %}
+                    <option value="{{ publication.year }}">
+                        {{ publication.year }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select id="typeFilter">
+                <option value="all">全部類型</option>
+                <option value="journal">期刊論文</option>
+                <option value="conference">研討會論文</option>
+                <option value="other">其他</option>
+            </select>
+        </div>
+
+        <!-- 統計卡片 -->
+        <section class="publication-dashboard">
+            <div class="stat-card">
+                <h3>符合條件的論文數量</h3>
+                <p id="publicationCount">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>涵蓋年份</h3>
+                <p id="yearCount">0</p>
+            </div>
+        </section>
+
+        <!-- 圖表 -->
+        <section class="chart-section">
+            <div class="chart-heading">
+                <h2>各年度論文發表統計</h2>
+
+                <select id="chartType">
+                    <option value="bar">長條圖</option>
+                    <option value="line">折線圖</option>
+                </select>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="publicationChart"></canvas>
+            </div>
+        </section>
+
+        <!-- 論文列表 -->
+        <h2>學術論著列表</h2>
+
+        <div id="publicationList">
+            {% for publication in publications %}
+                <article
+                    class="publication"
+                    data-year="{{ publication.year }}"
+                    data-type="{{ publication.publication_type }}"
+                >
+                    <h3>{{ publication.title }}</h3>
+                    <p>作者：{{ publication.authors }}</p>
+                    <p>
+                        年份：{{ publication.year }}
+                        ｜
+                        類型：{{ publication.get_publication_type_display }}
+                    </p>
+
+                    {% if publication.venue %}
+                        <p>發表期刊或會議：{{ publication.venue }}</p>
+                    {% endif %}
+
+                    {% if publication.url %}
+                        <p>
+                            <a href="{{ publication.url }}"
+                               target="_blank"
+                               rel="noopener noreferrer">
+                                查看論文
+                            </a>
+                        </p>
+                    {% endif %}
+                </article>
+            {% empty %}
+                <p>目前尚無學術論著資料。</p>
+            {% endfor %}
+        </div>
+
+        <p id="noResults" hidden>
+            找不到符合條件的論文。
+        </p>
+    </main>
+</body>
+</html>

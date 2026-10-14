@@ -1,87 +1,103 @@
 
+{% load static %}
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MY CAMPUS 校園資訊網</title>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: "Microsoft JhengHei", sans-serif;
-    }
-
-    nav {
-      background: #172e73;
-      padding: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-    }
-
-    .links a {
-      color: white;
-      text-decoration: none;
-      margin-left: 20px;
-    }
-
-    .links a:hover {
-      color: #9bd4ff;
-    }
-
-    section {
-      padding: 60px 30px;
-      min-height: 200px;
-      border-bottom: 1px solid #ddd;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教授學術網站｜首頁</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}?v=2">
 </head>
-
 <body>
 
-  <nav>
-    <div class="logo">MY CAMPUS</div>
+    <!-- 導覽列 -->
+    <nav>
+ <nav>
+    
+<nav>
+    <a href="{% url 'home' %}">首頁</a>
+    <a href="{% url 'publication_list' %}">學術論著</a>
+      <a href="{% url 'project_list' %}">主持計畫</a>
 
-    <div class="links">
-      <a href="#home">首頁</a>
-      <a href="#courses">課程資訊</a>
-      <a href="#life">校園生活</a>
-      <a href="#news">最新消息</a>
-      <a href="#contact">聯絡我們</a>
-    </div>
-  </nav>
+</nav>
 
-  <section id="home">
-    <h1>歡迎來到 MY CAMPUS</h1>
-    <p>這是我們的校園資訊網站。</p>
-  </section>
+</nav>
+    </nav>
 
-  <section id="courses">
-    <h2>課程資訊</h2>
-    <p>查看本學期的課程介紹。</p>
-  </section>
+    <!-- 首頁介紹 -->
+    <header class="hero">
+        <h1>教授學術研究網站</h1>
+   
+    </header>
 
-  <section id="life">
-    <h2>校園生活</h2>
-    <p>認識校園活動與學生生活。</p>
-  </section>
+    <main>
+        <!-- 學術成果入口 -->
+        <section>
+            <h2>探索學術成果</h2>
 
-  <section id="news">
-    <h2>最新消息</h2>
-    <p>查看學校的最新公告。</p>
-  </section>
+            <div class="card-container">
+                <a href="{% url 'publication_list' %}" class="card">
+                    <h3>📚 學術論著</h3>
+                    <p>查看期刊論文與研討會論文</p>
+                </a>
 
-  <section id="contact">
-    <h2>聯絡我們</h2>
-    <p>歡迎與學校聯繫。</p>
-  </section>
+                <a href="{% url 'project_list' %}" class="card">
+                    <h3>📋 主持計畫</h3>
+                    <p>查看研究計畫與執行成果</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- 最新消息 -->
+        <section>
+            <h2>📢 最新消息</h2>
+            <div class="notice">
+                <p>目前尚無最新消息。</p>
+            </div>
+        </section>
+
+        <!-- 聯絡方式 -->
+        <section>
+            <h2>📍 聯絡方式</h2>
+
+            <div class="contact">
+                <p><strong>研究室：</strong>
+                    未來科技應用大樓 7F ST704 室
+                </p>
+
+                <p><strong>研究室電話：</strong>
+                    05-534-2601 分機 4525
+                </p>
+
+                <p><strong>實驗室：</strong>
+                    人工智慧物聯網應用技術實驗室
+                    （未來科技應用大樓 5F ST508）
+                </p>
+
+                <p><strong>實驗室電話：</strong>
+                    05-534-2601 分機 4583
+                </p>
+
+                <p><strong>Email：</strong>
+                    <a href="mailto:jerryhata@yuntech.edu.tw">
+                        jerryhata@yuntech.edu.tw
+                    </a>
+                    /
+                    <a href="mailto:jerryhata@gmail.com">
+                        jerryhata@gmail.com
+                    </a>
+                </p>
+
+                <p><strong>地址：</strong>
+                    64002 雲林縣斗六市大學路三段123號
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>教授學術網站｜AI 網頁設計課堂範例</p>
+    </footer>
 
 </body>
 </html>
