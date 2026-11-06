@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>教授學術網站｜首頁</title>
     <link rel="stylesheet" href="{% static 'style.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'feedback.css' %}">
+    <script src="{% static 'feedback.js' %}?v=2" defer></script>
+
 </head>
 <body>
 
@@ -93,6 +96,54 @@
                 </p>
             </div>
         </section>
+
+        <section id="feedbackSection" aria-labelledby="feedbackTitle">
+    <h2 id="feedbackTitle">網站使用意見回饋</h2>
+    <p>請分享你的瀏覽感受，請勿填寫個人資料。</p>
+
+<p>
+    本頁前景停留時間：
+    <strong id="staySeconds">0</strong> 秒
+</p>
+
+
+
+    <form id="feedbackForm">
+        <label for="purpose">瀏覽目的</label>
+        <select id="purpose" name="purpose" required>
+            <option value="">請選擇</option>
+            <option value="publications">查看學術論著</option>
+            <option value="projects">查看研究計畫</option>
+            <option value="contact">尋找聯絡方式</option>
+            <option value="other">其他</option>
+        </select>
+
+        <label for="rating">使用感受</label>
+        <select id="rating" name="rating" required>
+            <option value="">請選擇</option>
+            <option value="good">好用</option>
+            <option value="neutral">普通</option>
+            <option value="bad">不好用</option>
+        </select>
+
+        <label for="comment">意見內容</label>
+        <textarea
+            id="comment"
+            name="comment"
+            rows="4"
+            maxlength="500"
+            required
+            placeholder="例如：找不到研究計畫的入口"
+        ></textarea>
+
+        <button id="submitBtn" type="submit">送出回饋</button>
+
+        <p id="feedbackStatus" role="status"></p>
+    </form>
+
+    <h3>本頁最近一次有效回饋</h3>
+    <p id="feedbackPreview">尚未送出。</p>
+</section>
     </main>
 
     <footer>
