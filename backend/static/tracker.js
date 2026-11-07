@@ -87,7 +87,7 @@
       document.visibilityState === "visible" &&
       visibleStartedAt === null
     ) {
-      visibleStartedAt = Date.now();
+     visibleStartedAt = performance.now();
     }
   }
 
@@ -98,9 +98,9 @@
     }
 
     const visibleMs = Math.max(
-      0,
-      Date.now() - visibleStartedAt
-    );
+  0,
+  Math.round(performance.now() - visibleStartedAt)
+);
 
     visibleStartedAt = null;
 
@@ -115,15 +115,20 @@
     });
   }
 
-  // 開始紀錄
-  function start() {
-    getSessionId();
-    sessionStorage.setItem(ENABLED_KEY, "true");
+function start() {
+  const wasEnabled = isEnabled();
 
-    startVisibleTimer();
+  getSessionId();
+  sessionStorage.setItem(ENABLED_KEY, "true");
 
-    console.log("操作紀錄已開始");
+  if (!wasEnabled) {
+    track("page_view", "page");
   }
+
+  startVisibleTimer();
+
+  console.log("操作紀錄已開始");
+}
 
   // 停止紀錄
   function stop() {
@@ -283,8 +288,12 @@
     exportJSON
   };
 
-  // 進入網站後自動開始紀錄
-start();
+
+// 追蹤已啟用時，記錄新進入的頁面
+if (isEnabled()) {
+  track("page_view", "page");
+  startVisibleTimer();
+}
 
 console.log("Week 10 tracker.js 已載入");
 })();

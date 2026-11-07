@@ -142,6 +142,61 @@
         <p id="projectNoResults" hidden>
             找不到符合條件的主持計畫。
         </p>
+
+<section aria-labelledby="demoFormTitle"
+         style="margin-top: 30px; padding: 20px; background: #f0f2f4; border-radius: 12px;">
+
+    <h2 id="demoFormTitle">計畫資料索取：驗證練習</h2>
+
+    <p>僅測試格式驗證，不會寄信或儲存輸入內容，請使用測試地址。</p>
+
+    <form id="inquiryDemoForm">
+        <label for="demoEmail">測試電子郵件</label>
+
+        <input
+            id="demoEmail"
+            name="demoEmail"
+            type="email"
+            required
+            placeholder="student@example.com"
+        >
+
+        <button type="submit">驗證資料</button>
+    </form>
+
+    <p id="demoFormStatus" role="status"></p>
+</section>
+
     </main>
+
+    <script>
+    const demoForm = document.getElementById("inquiryDemoForm");
+    const demoStatus = document.getElementById("demoFormStatus");
+
+    demoForm.addEventListener("invalid", function (event) {
+        const input = event.target;
+
+        const reason = input.validity.valueMissing
+            ? "value_missing"
+            : input.validity.typeMismatch
+                ? "type_mismatch"
+                : "other";
+
+        window.UITracker.track("form_invalid", input.id, {
+            reason: reason
+        });
+
+        demoStatus.textContent = "驗證未通過，請檢查測試電子郵件。";
+    }, true);
+
+    demoForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        window.UITracker.track("form_validated", demoForm.id);
+
+        demoStatus.textContent =
+            "格式驗證通過；本次未寄送或儲存資料。";
+    });
+</script>
 </body>
 </html>

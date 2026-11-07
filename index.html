@@ -108,7 +108,28 @@
             </div>
         </section>
 
-        
+        <div style="padding: 16px; background: #f0f2f4; text-align: center;">
+    <p>
+        本測試會記錄點擊、搜尋長度、篩選條件與可見停留時間，
+        資料暫存在此分頁的瀏覽器中。
+    </p>
+
+    <button type="button" onclick="UITracker.start()">
+        開始測試
+    </button>
+
+    <button type="button" onclick="UITracker.stop()">
+        停止紀錄
+    </button>
+
+    <button type="button" onclick="console.table(UITracker.read())">
+        查看紀錄
+    </button>
+
+    <button type="button" onclick="UITracker.reset()">
+        清除紀錄
+    </button>
+</div>
     </main>
 
     <footer>
