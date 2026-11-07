@@ -283,8 +283,8 @@
     exportJSON
   };
 
-  // 如果上一頁已經啟動追蹤，繼續計時
-  startVisibleTimer();
+  // 進入網站後自動開始紀錄
+start();
 
-  console.log("Week 10 tracker.js 已載入");
+console.log("Week 10 tracker.js 已載入");
 })();
