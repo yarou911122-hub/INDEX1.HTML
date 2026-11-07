@@ -7,25 +7,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>教授學術網站｜首頁</title>
     <link rel="stylesheet" href="{% static 'style.css' %}?v=2">
- 
-   
+    <script src="{% static 'tracker.js' %}" defer></script>
+
 
 </head>
 <body>
 
     <!-- 導覽列 -->
-    <nav>
- <nav>
+
     
+
 <nav>
-    <a href="{% url 'home' %}">首頁</a>
-    <a href="{% url 'publication_list' %}">學術論著</a>
-      <a href="{% url 'project_list' %}">主持計畫</a>
+    <a href="{% url 'home' %}"
+       onclick="UITracker.track('nav_click', 'nav_home')">
+        首頁
+    </a>
 
+    <a href="{% url 'publication_list' %}"
+       onclick="UITracker.track('nav_click', 'nav_publications')">
+        學術論著
+    </a>
+
+    <a href="{% url 'project_list' %}"
+       onclick="UITracker.track('nav_click', 'nav_projects')">
+        主持計畫
+    </a>
 </nav>
 
-</nav>
-    </nav>
+
 
     <!-- 首頁介紹 -->
     <header class="hero">
@@ -97,7 +106,7 @@
             </div>
         </section>
 
-    
+        
     </main>
 
     <footer>
@@ -105,4 +114,12 @@
     </footer>
 
 </body>
+
+<div style="text-align: center; margin: 30px;">
+    <button type="button"
+            onclick="UITracker.exportJSON()">
+        匯出操作紀錄 JSON
+    </button>
+</div>
+
 </html>

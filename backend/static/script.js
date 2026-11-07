@@ -147,13 +147,84 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 綁定互動事件
-    searchInput.addEventListener("input", updateDashboard);
+    
+    // 搜尋行為追蹤：停止輸入 500 毫秒後才記錄
+    let searchTimer = null;
 
-    yearFilter.addEventListener("change", updateDashboard);
+    searchInput.addEventListener("input", function () {
 
-    typeFilter.addEventListener("change", updateDashboard);
+        // 原本的搜尋功能
+        updateDashboard();
 
-    chartType.addEventListener("change", updateDashboard);
+        clearTimeout(searchTimer);
+
+        searchTimer = setTimeout(function () {
+
+            if (window.UITracker && UITracker.isEnabled()) {
+
+                const keyword = searchInput.value.trim();
+                const filtered = getFilteredPublications();
+
+                UITracker.track("search", "searchInput", {
+                    keyword_length: keyword.length,
+                    result_count: filtered.length
+                });
+            }
+
+        }, 500);
+    });
+
+yearFilter.addEventListener("change", function () {
+
+    // 保留原本的年份篩選功能
+    updateDashboard();
+
+    // 記錄使用者選擇的年份
+    if (window.UITracker && UITracker.isEnabled()) {
+
+        const filtered = getFilteredPublications();
+
+        UITracker.track("filter_change", "yearFilter", {
+            selected_year: yearFilter.value,
+            result_count: filtered.length
+        });
+    }
+});
+
+
+ 
+typeFilter.addEventListener("change", function () {
+
+    // 保留原本的論文類型篩選功能
+    updateDashboard();
+
+    // 記錄使用者選擇的論文類型
+    if (window.UITracker && UITracker.isEnabled()) {
+
+        const filtered = getFilteredPublications();
+
+        UITracker.track("filter_change", "typeFilter", {
+            selected_type: typeFilter.value,
+            result_count: filtered.length
+        });
+    }
+});
+
+    
+chartType.addEventListener("change", function () {
+
+    // 保留原本的圖表切換功能
+    updateDashboard();
+
+    // 記錄使用者切換的圖表類型
+    if (window.UITracker && UITracker.isEnabled()) {
+
+        UITracker.track("chart_change", "chartType", {
+            selected_chart: chartType.value
+        });
+
+    }
+});
 
     // 初次載入
     updateDashboard();
@@ -297,10 +368,95 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    searchInput.addEventListener("input", updateDashboard);
-    yearFilter.addEventListener("change", updateDashboard);
-    fundingFilter.addEventListener("change", updateDashboard);
-    chartType.addEventListener("change", updateDashboard);
+   
+    // 主持計畫搜尋行為追蹤
+    let projectSearchTimer = null;
+
+    searchInput.addEventListener("input", function () {
+
+        // 保留原本搜尋與圖表更新功能
+        updateDashboard();
+
+        // 避免每輸入一個字就記錄一次
+        clearTimeout(projectSearchTimer);
+
+        projectSearchTimer = setTimeout(function () {
+
+            if (window.UITracker && UITracker.isEnabled()) {
+
+                const keyword = searchInput.value.trim();
+
+                // 計算目前顯示的計畫數量
+                const resultCount = projects.filter(function (project) {
+                    return !project.hidden;
+                }).length;
+
+                UITracker.track("search", "projectSearch", {
+                    keyword_length: keyword.length,
+                    result_count: resultCount
+                });
+            }
+
+        }, 500);
+    });
+
+    
+yearFilter.addEventListener("change", function () {
+
+    // 保留原本的年份篩選與圖表更新
+    updateDashboard();
+
+    // 記錄使用者選擇的年份
+    if (window.UITracker && UITracker.isEnabled()) {
+
+        // 計算篩選後顯示的計畫數量
+        const resultCount = projects.filter(function (project) {
+            return !project.hidden;
+        }).length;
+
+        UITracker.track("filter_change", "projectYearFilter", {
+            selected_year: yearFilter.value,
+            result_count: resultCount
+        });
+    }
+});
+
+    
+fundingFilter.addEventListener("change", function () {
+
+    // 保留原本的經費來源篩選功能
+    updateDashboard();
+
+    // 記錄使用者選擇的經費來源
+    if (window.UITracker && UITracker.isEnabled()) {
+
+        // 計算篩選後顯示的計畫數量
+        const resultCount = projects.filter(function (project) {
+            return !project.hidden;
+        }).length;
+
+        UITracker.track("filter_change", "fundingFilter", {
+            selected_funding: fundingFilter.value,
+            result_count: resultCount
+        });
+    }
+});
+
+    
+chartType.addEventListener("change", function () {
+
+    // 保留原本的圖表切換功能
+    updateDashboard();
+
+    // 記錄使用者切換的圖表類型
+    if (window.UITracker && UITracker.isEnabled()) {
+
+        UITracker.track("chart_change", "projectChartType", {
+            selected_chart: chartType.value
+        });
+
+    }
+});
 
     // 網頁載入時先顯示所有統計
     updateDashboard();

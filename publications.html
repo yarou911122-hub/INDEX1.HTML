@@ -12,13 +12,27 @@
     <!-- Chart.js 圖表套件 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
     <script src="{% static 'script.js' %}" defer></script>
+    <script src="{% static 'tracker.js' %}" defer></script>
 </head>
 <body>
-    <nav>
-        <a href="{% url 'home' %}">首頁</a>
-        <a href="{% url 'publication_list' %}">學術論著</a>
-        <a href="{% url 'project_list' %}">主持計畫</a>
-    </nav>
+    
+<nav>
+    <a href="{% url 'home' %}"
+       onclick="UITracker.track('nav_click', 'nav_home')">
+        首頁
+    </a>
+
+    <a href="{% url 'publication_list' %}"
+       onclick="UITracker.track('nav_click', 'nav_publications')">
+        學術論著
+    </a>
+
+    <a href="{% url 'project_list' %}"
+       onclick="UITracker.track('nav_click', 'nav_projects')">
+        主持計畫
+    </a>
+</nav>
+
 
     <main>
         <h1>學術論著</h1>
