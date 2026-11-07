@@ -48,12 +48,14 @@
             <h2>探索學術成果</h2>
 
             <div class="card-container">
-                <a href="{% url 'publication_list' %}" class="card">
+                <a href="{% url 'publication_list' %}" class="card"
+                    onclick="UITracker.track('nav_click', 'card_publications')">
                     <h3>📚 學術論著</h3>
                     <p>查看期刊論文與研討會論文</p>
                 </a>
 
-                <a href="{% url 'project_list' %}" class="card">
+                <a href="{% url 'project_list' %}" class="card"
+                    onclick="UITracker.track('nav_click', 'card_projects')">
                     <h3>📋 主持計畫</h3>
                     <p>查看研究計畫與執行成果</p>
                 </a>
@@ -118,8 +120,8 @@
         匯出操作紀錄 JSON
     </button>
 </div>
-</body>
 
+</body>
 
 
 </html>
