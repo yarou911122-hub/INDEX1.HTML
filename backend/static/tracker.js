@@ -21,6 +21,65 @@
   const ENABLED_KEY = "week10_enabled";
   const SEQ_KEY = "week10_seq";
 
+
+  // Week 11：Django API 網址
+  const API_URL = "/api/events/";
+
+  // 取得 Django 的 CSRF Token
+  function getCSRFToken() {
+    const cookies = document.cookie.split(";");
+
+    for (const cookie of cookies) {
+      const value = cookie.trim();
+
+      if (value.startsWith("csrftoken=")) {
+        return decodeURIComponent(
+          value.substring("csrftoken=".length)
+        );
+      }
+    }
+
+    return "";
+  }
+
+  // 將操作紀錄傳送到 Django API
+  async function sendEvent(event) {
+    const token = getCSRFToken();
+
+    if (!token) {
+      console.warn("找不到 CSRF Token，暫不傳送");
+      return false;
+    }
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": token
+        },
+        body: JSON.stringify(event),
+        credentials: "same-origin"
+      });
+
+      if (!response.ok) {
+        console.warn(
+          "操作紀錄上傳失敗：",
+          response.status
+        );
+        return false;
+      }
+
+      console.log("操作紀錄已上傳 Neon");
+      return true;
+
+    } catch (error) {
+      console.warn("API 連線失敗：", error);
+      return false;
+    }
+  }
+
+
   // 判斷目前是哪個頁面
   function getPageId() {
     const path = window.location.pathname;
@@ -209,10 +268,16 @@ function start() {
       );
 
       console.log("已記錄事件：", event);
+
+      // Week 11：同步傳送操作紀錄到 Django API
+      sendEvent(event);
+
     } catch (error) {
       console.warn("操作紀錄儲存失敗", error);
     }
   }
+
+  
 
   // 清除本課的紀錄
   function reset() {
