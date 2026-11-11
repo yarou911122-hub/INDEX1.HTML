@@ -14,4 +14,13 @@ urlpatterns = [
         views.project_list,
         name="project_list"
     ),
+
+
+ # Week 11：接收使用者操作紀錄
+    path(
+        "api/events/",
+        views.receive_event,
+        name="receive_event"
+    ),
+
 ]

@@ -57,3 +57,27 @@ class Project(models.Model):
         verbose_name = "主持計畫"
         verbose_name_plural = "主持計畫"
         ordering = ["-start_year", "-id"]
+
+
+
+# Week 11：網站操作紀錄資料模型
+class UIEvent(models.Model):
+    event_id = models.CharField(max_length=100, unique=True)
+    session_id = models.CharField(max_length=100)
+    seq = models.IntegerField()
+
+    event_type = models.CharField(max_length=100)
+    page_id = models.CharField(max_length=100)
+    target_id = models.CharField(max_length=100, blank=True)
+
+    occurred_at = models.DateTimeField()
+
+    ui_version = models.CharField(max_length=50, blank=True)
+    test_phase = models.CharField(max_length=50, blank=True)
+
+    data = models.JSONField(default=dict, blank=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.event_type} - {self.page_id}"

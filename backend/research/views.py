@@ -1,6 +1,10 @@
+import json
 
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render
-from .models import Publication, Project
+from .models import Publication, Project, UIEvent
 
 
 # 首頁
@@ -31,3 +35,62 @@ def project_list(request):
         "projects.html",
         {"projects": projects}
     )
+
+
+
+# Week 11：接收網站操作紀錄
+
+@require_POST
+@csrf_protect
+def receive_event(request):
+    try:
+        event = json.loads(request.body)
+
+        if not isinstance(event, dict):
+            return JsonResponse({
+                "success": False,
+                "message": "資料格式錯誤"
+            }, status=400)
+
+        # 檢查必要欄位
+        required_fields = [
+            "event_id",
+            "session_id",
+            "seq",
+            "event_type",
+            "page_id",
+            "occurred_at"
+        ]
+
+        if any(event.get(field) is None for field in required_fields):
+            return JsonResponse({
+                "success": False,
+                "message": "缺少必要欄位"
+            }, status=400)
+
+        # 將操作紀錄寫入資料庫
+        record = UIEvent.objects.create(
+            event_id=event["event_id"],
+            session_id=event["session_id"],
+            seq=event["seq"],
+            event_type=event["event_type"],
+            page_id=event["page_id"],
+            target_id=event.get("target_id") or "",
+            occurred_at=event["occurred_at"],
+            ui_version=event.get("ui_version") or "",
+            test_phase=event.get("test_phase") or "",
+            data=event.get("data") or {}
+        )
+
+        return JsonResponse({
+            "success": True,
+            "message": "操作紀錄已儲存",
+            "id": record.id
+        })
+
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return JsonResponse({
+            "success": False,
+            "message": "JSON 格式錯誤"
+        }, status=400)
+
