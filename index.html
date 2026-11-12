@@ -8,7 +8,7 @@
     <title>教授學術網站｜首頁</title>
     <link rel="stylesheet" href="{% static 'style.css' %}?v=2">
     <script src="{% static 'tracker.js' %}" defer></script>
-
+<script src="{% static 'feedback.js' %}" defer></script>
 
 </head>
 <body>
@@ -130,6 +130,61 @@
         清除紀錄
     </button>
 </div>
+
+<!-- 網站意見回饋 -->
+<section aria-labelledby="feedback-title">
+    <h2 id="feedback-title">網站意見回饋</h2>
+    <p>這個頁面對你有幫助嗎？歡迎留下評價與建議。</p>
+
+    <form id="feedback-form"
+          data-page-id="home"
+          data-api-url="{% url 'receive_feedback' %}">
+
+        {% csrf_token %}
+
+        <fieldset>
+            <legend>頁面評價（必填）</legend>
+
+            <label>
+                <input type="radio"
+                       name="rating"
+                       value="like"
+                       required>
+                👍 按讚
+            </label>
+
+            <label>
+                <input type="radio"
+                       name="rating"
+                       value="dislike"
+                       required>
+                👎 倒讚
+            </label>
+        </fieldset>
+
+        <p>
+            <label for="feedback-comment">你的意見（必填）</label>
+        </p>
+
+        <textarea id="feedback-comment"
+                  name="comment"
+                  rows="4"
+                  maxlength="2000"
+                  required
+                  placeholder="請輸入你的意見，最多 2000 字。"></textarea>
+
+        <p>請勿填寫密碼、電話等敏感個人資訊。</p>
+
+        <button id="feedback-submit" type="submit">
+            送出回饋
+        </button>
+
+        <p id="feedback-message"
+           role="status"
+           aria-live="polite"></p>
+    </form>
+</section>
+
     </main>
 
     <footer>
