@@ -81,3 +81,35 @@ class UIEvent(models.Model):
 
     def __str__(self):
         return f"{self.event_type} - {self.page_id}"
+
+
+# 網站意見回饋
+class Feedback(models.Model):
+    RATING_CHOICES = [
+        ("like", "按讚"),
+        ("dislike", "倒讚"),
+    ]
+
+    page_id = models.CharField(
+        "頁面識別碼",
+        max_length=100
+    )
+
+    rating = models.CharField(
+        "頁面評價",
+        max_length=10,
+        choices=RATING_CHOICES
+    )
+
+    comment = models.TextField(
+        "意見內容",
+        max_length=2000
+    )
+
+    created_at = models.DateTimeField(
+        "送出時間",
+        auto_now_add=True
+    )
+
+    def __str__(self):
+        return f"{self.page_id} - {self.get_rating_display()}"

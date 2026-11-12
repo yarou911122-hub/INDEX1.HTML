@@ -5,6 +5,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import render
 from .models import Publication, Project, UIEvent
+from .models import Feedback
 
 
 # 首頁
@@ -94,3 +95,62 @@ def receive_event(request):
             "message": "JSON 格式錯誤"
         }, status=400)
 
+
+
+# 接收按讚、倒讚與意見回饋
+@require_POST
+@csrf_protect
+def receive_feedback(request):
+    try:
+        data = json.loads(request.body)
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return JsonResponse({
+            "success": False,
+            "message": "JSON 格式錯誤"
+        }, status=400)
+
+    if not isinstance(data, dict):
+        return JsonResponse({
+            "success": False,
+            "message": "資料格式錯誤"
+        }, status=400)
+
+    page_id = data.get("page_id")
+    rating = data.get("rating")
+    comment = data.get("comment")
+
+    if page_id not in ("home", "publications", "projects"):
+        return JsonResponse({
+            "success": False,
+            "message": "頁面識別碼錯誤"
+        }, status=400)
+
+    if rating not in ("like", "dislike"):
+        return JsonResponse({
+            "success": False,
+            "message": "請選擇按讚或倒讚"
+        }, status=400)
+
+    if not isinstance(comment, str) or not comment.strip():
+        return JsonResponse({
+            "success": False,
+            "message": "請填寫意見"
+        }, status=400)
+
+    if len(comment.strip()) > 2000:
+        return JsonResponse({
+            "success": False,
+            "message": "意見不可超過 2000 字"
+        }, status=400)
+
+    record = Feedback.objects.create(
+        page_id=page_id,
+        rating=rating,
+        comment=comment.strip()
+    )
+
+    return JsonResponse({
+        "success": True,
+        "message": "感謝你的回饋，意見已儲存！",
+        "id": record.id
+    })

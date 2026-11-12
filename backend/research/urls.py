@@ -23,4 +23,10 @@ urlpatterns = [
         name="receive_event"
     ),
 
-]
+
+path("api/feedback/", 
+     views.receive_feedback, 
+     name="receive_feedback"
+     ),
+
+     ]
