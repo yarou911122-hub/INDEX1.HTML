@@ -2,6 +2,10 @@
 from django.contrib import admin
 from .models import Publication, Project, UIEvent, Feedback
 
+from django.urls import path
+from .views import dashboard
+
+
 
 # 學術論著
 @admin.register(Publication)
@@ -94,3 +98,20 @@ class FeedbackAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+
+
+# 將 Dashboard 加入 Django Admin
+original_get_urls = admin.site.get_urls
+
+def get_admin_urls():
+    custom_urls = [
+        path(
+            "dashboard/",
+            admin.site.admin_view(dashboard),
+            name="dashboard",
+        ),
+    ]
+    return custom_urls + original_get_urls()
+
+admin.site.get_urls = get_admin_urls
